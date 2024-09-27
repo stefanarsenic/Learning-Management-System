@@ -24,7 +24,7 @@ public class RegisteredUser{
     @Column(unique = true, nullable = false)
     @Email
     private String email;
-    private boolean enabled;
+    private boolean enabled = true;
     private boolean tokenExpired;
 
     @ManyToMany

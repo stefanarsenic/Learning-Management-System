@@ -1,13 +1,12 @@
-package org.example.userservice.service;
+package org.example.userservice.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.userservice.model.Privilege;
 import org.example.userservice.model.RegisteredUser;
 import org.example.userservice.model.Role;
-import org.example.userservice.repository.RegisteredUserRepository;
-import org.example.userservice.repository.RoleRepository;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.example.userservice.repositories.RegisteredUserRepository;
+import org.example.userservice.repositories.RoleRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
