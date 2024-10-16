@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final MyUserDetailsService userDetailsService;
-    private final RegisteredUserService userService;
 
     @GetMapping("/by-username/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username){

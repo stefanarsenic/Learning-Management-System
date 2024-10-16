@@ -1,0 +1,18 @@
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          predicates:
+            - Path:=/auth/
+          uri: localhost:8050
+        - id: address-service
+          predicates:
+            - Path:=/api/address/
+          uri: localhost:8051
+server:
+  port: 8080

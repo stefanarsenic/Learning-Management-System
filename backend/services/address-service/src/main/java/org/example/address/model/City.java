@@ -1,23 +1,23 @@
-package org.example.userservice.model;
+package org.example.address.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
-public class Student {
+public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true, nullable = false)
-    private String jmbg;
-    private String ime;
-    private String prezime;
+    private String name;
     @ManyToOne
-    private RegisteredUser user;
+    private Country country;
 }
