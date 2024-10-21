@@ -1,0 +1,23 @@
+<ng-container *ngIf="data$ | async as data">
+  <mc-backend-error-messages
+    *ngIf="data.backendErrors"
+    [backendErrors]="data.backendErrors"
+  >
+  </mc-backend-error-messages>
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <div class="formGroup">
+    <label for="username">Username</label>
+    <input pInputText id="username" formControlName="username" />
+  </div>
+  <div class="formGroup">
+    <label for="password">Password</label>
+    <input pInputText id="password" formControlName="password" />
+  </div>
+  <div class="formGroup">
+    <label for="email">Email</label>
+    <input pInputText id="email" formControlName="email" />
+  </div>
+  <button [disabled]="data.isSubmitting | async" type="submit" class="btn-submit">Register</button>
+  <a routerLink="/login">Already have account?</a>
+</form>
+</ng-container>

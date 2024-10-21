@@ -1,16 +1,14 @@
 package org.example.gatewayservice.filter;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.http.client.methods.HttpHead;
-import org.example.gatewayservice.feign.SecurityFeignClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -20,7 +18,8 @@ import reactor.core.publisher.Mono;
 public class AuthenticationFilter implements GatewayFilter {
 
     private final RouteValidator routeValidator;
-    private final SecurityFeignClient securityFeignClient;
+    private final WebClient.Builder webClientBuilder;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
@@ -32,9 +31,19 @@ public class AuthenticationFilter implements GatewayFilter {
 
             final String token = this.getAuthHeader(request);
 
-            if (!securityFeignClient.validateToken(token).getBody()) {
-                return this.onError(exchange, HttpStatus.FORBIDDEN);
-            }
+            return webClientBuilder.build()
+                    .get()
+                    .uri("http://localhost:8050/auth/validateToken")
+                    .header("Authorization", token)
+                    .retrieve()
+                    .bodyToMono(Boolean.class)
+                    .flatMap(isValid -> {
+                        if (!isValid) {
+                            return this.onError(exchange, HttpStatus.FORBIDDEN);
+                        }
+                        return chain.filter(exchange);
+                    })
+                    .onErrorResume(e -> this.onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR));
         }
         return chain.filter(exchange);
     }

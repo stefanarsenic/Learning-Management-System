@@ -8,11 +8,16 @@ spring:
       routes:
         - id: user-service
           predicates:
-            - Path:=/auth/
+            - Path:=/auth/**
           uri: localhost:8050
         - id: address-service
           predicates:
-            - Path:=/api/address/
+            - Path:=/api/address/**
           uri: localhost:8051
 server:
   port: 8080
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
