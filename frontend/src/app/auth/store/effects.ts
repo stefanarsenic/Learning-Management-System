@@ -7,6 +7,28 @@ import {CurrentUserInterface} from '../../shared/types/currentUser.interface';
 import {HttpErrorResponse} from '@angular/common/http';
 import {PersistanceService} from '../../shared/services/persistance.service';
 import {Router} from '@angular/router';
+import { BackendErrorInterface } from '../../shared/types/backendError.interface';
+
+export const getCurrentUserEffect = createEffect((
+  actions$ = inject(Actions),
+  authService: AuthService = inject(AuthService),
+) => {
+  return actions$.pipe(
+    ofType(authActions.getCurrentUser),
+    switchMap(() => {
+      return authService.getCurrentUser().pipe(
+        map((currentUser: CurrentUserInterface) => {
+          return authActions.getCurrentUserSuccess({currentUser});
+        }),
+        catchError((error: BackendErrorInterface) => {
+          return of(authActions.getCurrentUserFailure({error: error}));
+        })
+      )
+    })
+  )
+}, {functional: true})
+
+//logout effect
 
 export const registerEffect = createEffect((
   actions$ = inject(Actions),

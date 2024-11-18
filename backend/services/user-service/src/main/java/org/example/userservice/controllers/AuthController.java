@@ -30,6 +30,41 @@ public class AuthController {
     private final JwtService jwtService;
     private final MyUserDetailsService userDetailsService;
 
+    @GetMapping("/current-user")
+    public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String token) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            HashMap<String, String> errorMessage = new HashMap<>();
+            errorMessage.put("Error", "Authorization header missing");
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
+
+        token = token.substring(7);
+
+        try {
+            String username = jwtService.extractUsername(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            boolean isValid = jwtService.isTokenValid(token, userDetails);
+
+            if(isValid) {
+                LoginResponse loginResponse = new LoginResponse(username, token, jwtService.getExpirationTime());
+                return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
+            }
+            else {
+                HashMap<String, String> errorMessage = new HashMap<>();
+                errorMessage.put("Error", "Token validation failed");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+            }
+        } catch (UsernameNotFoundException ex) {
+            HashMap<String, String> errorMessage = new HashMap<>();
+            errorMessage.put("Error", "Username not found");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
+        } catch (Exception ex) {
+            HashMap<String, String> errorMessage = new HashMap<>();
+            errorMessage.put("Error", "Token validation failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterUserRequest request){
         return ResponseEntity.ok(authService.registerUser(request));
