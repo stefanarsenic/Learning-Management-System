@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -31,18 +31,18 @@ public class AuthController {
     private final MyUserDetailsService userDetailsService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserRequest request){
+    public ResponseEntity<?> registerUser(@RequestBody RegisterUserRequest request){
         return ResponseEntity.ok(authService.registerUser(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody @Valid LoginUserRequest request){
+    public ResponseEntity<?> authenticate(@RequestBody LoginUserRequest request){
         try {
             RegisteredUser registeredUser = authService.authenticate(request);
             User user = (User) userDetailsService.loadUserByUsername(registeredUser.getUsername());
             String jwt = jwtService.generateToken(user);
 
-            LoginResponse loginResponse = new LoginResponse(jwt, jwtService.getExpirationTime());
+            LoginResponse loginResponse = new LoginResponse(user.getUsername(), jwt, jwtService.getExpirationTime());
             return ResponseEntity.ok(loginResponse);
         }
         catch (AuthenticationException e) {

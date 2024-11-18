@@ -6,14 +6,14 @@
   </mc-backend-error-messages>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <div class="formGroup">
-      <label for="email">Email</label>
-      <input pInputText id="email" formControlName="email" />
+      <label for="username">Username</label>
+      <input pInputText id="username" formControlName="username" />
     </div>
     <div class="formGroup">
       <label for="password">Password</label>
       <input pInputText id="password" formControlName="password" />
     </div>
-    <button [disabled]="data.isSubmitting | async" type="submit" class="btn-submit">Login</button>
+    <button [disabled]="data.isSubmitting" type="submit" class="btn-submit">Login</button>
     <a routerLink="/register">Need an account?</a>
   </form>
 </ng-container>

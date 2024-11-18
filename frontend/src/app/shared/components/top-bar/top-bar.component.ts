@@ -6,6 +6,7 @@ import {AsyncPipe, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {combineLatestAll, combineLatestWith, map, Observable, of, OperatorFunction} from 'rxjs';
 import {CurrentUserInterface} from '../../types/currentUser.interface';
+import { authActions } from '../../../auth/store/actions';
 
 @Component({
   selector: 'top-bar',
@@ -20,12 +21,12 @@ import {CurrentUserInterface} from '../../types/currentUser.interface';
 })
 export class TopBarComponent {
 
-  data$ = this.store.select(selectCurrentUser).pipe(
-    combineLatestWith(of({})),
-    map(([currentUser]) => ({
-      currentUser
-    }))
-  );
+  currentUser$ = this.store.select(selectCurrentUser);
+
   constructor(private store: Store) {
+  }
+
+  logout(): void {
+    
   }
 }

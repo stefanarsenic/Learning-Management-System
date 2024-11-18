@@ -53,9 +53,7 @@ export class RegisterComponent {
   })
 
   onSubmit(){
-    const request: RegisterRequestInterface = {
-      user: this.form.getRawValue()
-    };
+    const request: RegisterRequestInterface = this.form.getRawValue();
     this.store.dispatch(authActions.register({request}));
   }
 }

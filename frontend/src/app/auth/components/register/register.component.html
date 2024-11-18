@@ -17,7 +17,7 @@
     <label for="email">Email</label>
     <input pInputText id="email" formControlName="email" />
   </div>
-  <button [disabled]="data.isSubmitting | async" type="submit" class="btn-submit">Register</button>
+  <button [disabled]="data.isSubmitting" type="submit" class="btn-submit">Register</button>
   <a routerLink="/login">Already have account?</a>
 </form>
 </ng-container>

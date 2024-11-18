@@ -15,18 +15,18 @@ export class AuthService {
   }
 
   getUser(response: AuthResponseInterface): CurrentUserInterface {
-    return response.user;
+    return response;
   }
 
   register(data: RegisterRequestInterface): Observable<CurrentUserInterface>{
-    const url = environment.apiUrl + '/users';
+    const url = environment.apiUrl + '/auth/register';
     return this.http
       .post<AuthResponseInterface>(url, data)
       .pipe(map(this.getUser));
   }
 
   login(data: LoginRequestInterface): Observable<CurrentUserInterface>{
-    const url = environment.apiUrl + '/users/login';
+    const url = environment.apiUrl + '/auth/login';
     return this.http
       .post<AuthResponseInterface>(url, data)
       .pipe(map(this.getUser));

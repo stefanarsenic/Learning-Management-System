@@ -1,5 +1,6 @@
-import {CurrentUserInterface} from '../../shared/types/currentUser.interface';
 
 export interface AuthResponseInterface {
-  user: CurrentUserInterface
+  username: string,
+  token: string,
+  expiresIn: number
 }

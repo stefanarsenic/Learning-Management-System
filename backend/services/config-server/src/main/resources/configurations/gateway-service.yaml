@@ -8,7 +8,7 @@ spring:
       routes:
         - id: user-service
           predicates:
-            - Path:=/auth/**
+            - Path:=/api/auth/**
           uri: localhost:8050
         - id: address-service
           predicates:

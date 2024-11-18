@@ -43,14 +43,12 @@ export class LoginComponent {
   }
 
   form = this.fb.nonNullable.group({
-    email: ["", Validators.required],
+    username: ["", Validators.required],
     password: ["", Validators.required],
   })
 
   onSubmit(){
-    const request: LoginRequestInterface = {
-      user: this.form.getRawValue()
-    };
+    const request: LoginRequestInterface = this.form.getRawValue();
     this.store.dispatch(authActions.login({request}));
   }
 }
