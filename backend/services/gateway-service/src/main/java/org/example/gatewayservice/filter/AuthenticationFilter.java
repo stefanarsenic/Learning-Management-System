@@ -32,8 +32,8 @@ public class AuthenticationFilter implements GatewayFilter {
             final String token = this.getAuthHeader(request);
 
             return webClientBuilder.build()
-                    .get()
-                    .uri("http://localhost:8050/auth/validateToken")
+                    .post()
+                    .uri("http://localhost:8050/api/auth/validateToken")
                     .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
@@ -43,7 +43,10 @@ public class AuthenticationFilter implements GatewayFilter {
                         }
                         return chain.filter(exchange);
                     })
-                    .onErrorResume(e -> this.onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR));
+                    .onErrorResume(e -> {
+                        System.out.println(e.getMessage());
+                        return this.onError(exchange, HttpStatus.INTERNAL_SERVER_ERROR);
+                    });
         }
         return chain.filter(exchange);
     }

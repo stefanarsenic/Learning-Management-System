@@ -11,11 +11,6 @@ spring:
             - Path:=/api/auth/**
           uri: localhost:8050
 
-        - id: user-service
-          predicates:
-            - Path:=/api/users/**
-          uri: localhost:8050
-
         - id: address-service
           predicates:
             - Path:=/api/address/**
