@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import {TopBarComponent} from './shared/components/top-bar/top-bar.component';
 import { Store } from '@ngrx/store';
 import { authActions } from './auth/store/actions';
+import { selectCurrentUser } from './auth/store/reducers';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,9 @@ import { authActions } from './auth/store/actions';
 export class AppComponent implements OnInit{
   title = 'frontend';
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+  ) {}
 
   ngOnInit(): void {
     this.store.dispatch(authActions.getCurrentUser());

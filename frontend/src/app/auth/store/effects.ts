@@ -11,6 +11,7 @@ import { BackendErrorInterface } from '../../shared/types/backendError.interface
 
 export const getCurrentUserEffect = createEffect((
   actions$ = inject(Actions),
+  router = inject(Router),
   authService: AuthService = inject(AuthService),
 ) => {
   return actions$.pipe(
@@ -21,6 +22,7 @@ export const getCurrentUserEffect = createEffect((
           return authActions.getCurrentUserSuccess({currentUser});
         }),
         catchError((error: BackendErrorInterface) => {
+          router.navigateByUrl('login');
           return of(authActions.getCurrentUserFailure({error: error}));
         })
       )

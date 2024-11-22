@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -46,7 +47,7 @@ public class AuthController {
             boolean isValid = jwtService.isTokenValid(token, userDetails);
 
             if(isValid) {
-                LoginResponse loginResponse = new LoginResponse(username, token, jwtService.getExpirationTime());
+                LoginResponse loginResponse = new LoginResponse(username, List.of(userDetails.getAuthorities().toString()), token, jwtService.getExpirationTime());
                 return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
             }
             else {
@@ -77,7 +78,7 @@ public class AuthController {
             User user = (User) userDetailsService.loadUserByUsername(registeredUser.getUsername());
             String jwt = jwtService.generateToken(user);
 
-            LoginResponse loginResponse = new LoginResponse(user.getUsername(), jwt, jwtService.getExpirationTime());
+            LoginResponse loginResponse = new LoginResponse(user.getUsername(), List.of(user.getAuthorities().toString()), jwt, jwtService.getExpirationTime());
             return ResponseEntity.ok(loginResponse);
         }
         catch (AuthenticationException e) {
